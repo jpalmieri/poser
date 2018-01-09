@@ -1,0 +1,3 @@
+class TwitterUser
+
+end
