@@ -1,4 +1,5 @@
 require 'uri'
+require 'redis'
 
 class TwitterUser
 
@@ -26,6 +27,15 @@ class TwitterUser
     end
   end
 
+  def new_tweets?
+    return true unless last_cached_tweet_date
+    DateTime.parse(last_tweet_date) > DateTime.parse(last_cached_tweet_date)
+  end
+
+  def cache_last_tweet_date
+    redis.set("#{@username}_last_tweet", last_tweet_date)
+  end
+
   private
 
   def client
@@ -43,5 +53,17 @@ class TwitterUser
   def clean_text(text)
     text = remove_urls(text)
     remove_extra_whitespace(text)
+  end
+
+  def last_cached_tweet_date
+    redis.get("#{@username}_last_tweet")
+  end
+
+  def last_tweet_date
+    original_tweets.first.created_at.to_s
+  end
+
+  def redis
+    @redis ||= Redis.new
   end
 end
