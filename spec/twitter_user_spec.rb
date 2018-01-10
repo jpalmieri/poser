@@ -2,7 +2,8 @@ require 'spec_helper'
 
 RSpec.describe TwitterUser do
   let(:client) { double 'client' }
-  let(:tweet) { OpenStruct.new(:text => "tweet") }
+  let(:tweet) { OpenStruct.new(:attrs => { full_text: tweet_text }) }
+  let(:tweet_text) { "tweet" }
   let(:twitter_user) { TwitterUser.new('jonhdoe') }
 
   before do
@@ -14,8 +15,8 @@ RSpec.describe TwitterUser do
     subject { twitter_user.cleaned_tweets }
 
     context 'with urls in source tweets text' do
+      let(:tweet_text) { "Blah blah blah https://t.co/xs0FXqhkVF boop bop" }
       before do
-        tweet.text = "Blah blah blah https://t.co/xs0FXqhkVF boop bop"
         allow(client).to receive(:user_timeline).and_return([tweet])
       end
 

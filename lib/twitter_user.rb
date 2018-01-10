@@ -7,12 +7,16 @@ class TwitterUser
   end
 
   def original_tweets
-    client.user_timeline(@user)
+    # Tweets are now being returned as truncated unless in 'extended mode'
+    # https://github.com/sferik/twitter/issues/813
+    client.user_timeline(@user, tweet_mode: "extended")
   end
 
   def cleaned_tweets
     original_tweets.map do |tweet|
-      OpenStruct.new(:text => clean_text(tweet.text))
+      # Accessing full_text via attrs due to 'extended mode'
+      # https://github.com/sferik/twitter/issues/813
+      OpenStruct.new(:text => clean_text(tweet.attrs[:full_text]))
     end
   end
 
