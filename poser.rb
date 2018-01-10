@@ -12,7 +12,7 @@ class Poser
   end
 
   def markov_tweet
-    @markov.generate_text
+    @markov.generate_tweet
   end
 
   private
