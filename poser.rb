@@ -7,7 +7,7 @@ class Poser
   attr_reader :tweets
 
   def initialize(username)
-    @tweets = TwitterUser.new(username).tweets
+    @tweets = TwitterUser.new(username).cleaned_tweets
     @markov = MarkovChain.new(concatenate_tweets)
   end
 
