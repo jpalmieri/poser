@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../poser.rb'
+
+options = {}
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: poser USERNAME [OPTIONS]"
+  opts.separator ""
+
+  opts.on('-h', '--help', 'Display this screen') do
+    STDOUT.puts opt_parser
+    exit
+  end
+end
+
+begin opt_parser.parse!
+rescue OptionParser::InvalidOption => err
+  abort("Sorry, #{err}. Run poser -h for allowed usage.")
+end
+
+username = ARGV[0]
+p Poser.new(username).markov_tweet
