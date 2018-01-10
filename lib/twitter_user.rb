@@ -2,14 +2,20 @@ require 'uri'
 
 class TwitterUser
 
-  def initialize(username)
+  def initialize(username, options={})
     @user = client.user(username)
+    @options = {
+      # Tweets are now being returned as truncated unless in 'extended mode'
+      # https://github.com/sferik/twitter/issues/813
+      tweet_mode: options.fetch(:tweet_mode, "extended"),
+      # Count is limited to 200 unless you fetch additional responses (TODO)
+      # https://github.com/sferik/twitter/blob/master/examples/AllTweets.md
+      count:      options.fetch(:count, 200)
+    }
   end
 
   def original_tweets
-    # Tweets are now being returned as truncated unless in 'extended mode'
-    # https://github.com/sferik/twitter/issues/813
-    client.user_timeline(@user, tweet_mode: "extended")
+    client.user_timeline(@user, @options)
   end
 
   def cleaned_tweets
