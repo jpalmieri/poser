@@ -12,10 +12,17 @@ class Poser
   end
 
   def markov_tweet
-    @markov.generate_tweet
+    truncate_sentences(@markov.generate_text, 140)
   end
 
   private
+
+  def truncate_sentences(text, character_limit)
+    # recursiely drop sentences until under character limit
+    return text if text.length <= character_limit
+    new_text = text.split('.').slice(0..-2).join('.')
+    truncate_sentences("#{new_text}.", character_limit)
+  end
 
   def concatenate_tweets
     @tweets.map {|t| t.text }.join("\n")
