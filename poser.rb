@@ -8,7 +8,8 @@ class Poser
 
   def initialize(username)
     @tweets = TwitterUser.new(username).cleaned_tweets
-    @markov = MarkovChain.new(concatenate_tweets)
+    @markov = MarkovChain.new(username)
+    @markov.add_text(concatenate_tweets)
   end
 
   def markov_tweet

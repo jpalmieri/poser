@@ -13,6 +13,7 @@ RSpec.describe Poser do
 
     before do
       allow(MarkovChain).to receive(:new).and_return(markov_chain)
+      allow(markov_chain).to receive(:add_text).and_return(markov_text)
       allow(markov_chain).to receive(:generate_text).and_return(markov_text)
       allow(TwitterUser).to receive(:new).and_return(twitter_user)
       allow(twitter_user).to receive(:cleaned_tweets).and_return(cleaned_tweets)
