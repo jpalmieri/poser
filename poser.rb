@@ -12,14 +12,18 @@ class Poser
     if tweet_cache
       @markov.add_text(tweet_cache)
     else
-      @tweets = TwitterUser.new(username).cleaned_tweets
-      @markov.add_text(concatenate_tweets)
-      cache_tweets
+      update_cache!
     end
   end
 
   def markov_tweet
     truncate_sentences(@markov.generate_text, 140)
+  end
+
+  def update_cache!
+    @tweets = TwitterUser.new(@username).cleaned_tweets
+    @markov.add_text(concatenate_tweets)
+    cache_tweets
   end
 
   private

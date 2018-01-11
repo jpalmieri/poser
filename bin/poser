@@ -12,6 +12,10 @@ opt_parser = OptionParser.new do |opts|
     STDOUT.puts opt_parser
     exit
   end
+
+  opts.on('-r', '--update-cache', 'Update local cache (pull down tweets)') do
+    options[:update_cache] = true
+  end
 end
 
 begin opt_parser.parse!
@@ -19,5 +23,6 @@ rescue OptionParser::InvalidOption => err
   abort("Sorry, #{err}. Run poser -h for allowed usage.")
 end
 
-username = ARGV[0]
-p Poser.new(username).markov_tweet
+poser = Poser.new(ARGV[0])
+poser.update_cache! if options[:update_cache]
+p poser.markov_tweet
