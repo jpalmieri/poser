@@ -7,9 +7,15 @@ class Poser
   attr_reader :tweets
 
   def initialize(username)
-    @tweets = TwitterUser.new(username).cleaned_tweets
+    @username = username
     @markov = MarkovChain.new(username)
-    @markov.add_text(concatenate_tweets)
+    if tweet_cache
+      @markov.add_text(tweet_cache)
+    else
+      @tweets = TwitterUser.new(username).cleaned_tweets
+      @markov.add_text(concatenate_tweets)
+      cache_tweets
+    end
   end
 
   def markov_tweet
@@ -27,5 +33,17 @@ class Poser
 
   def concatenate_tweets
     @tweets.map {|t| t.text }.join("\n")
+  end
+
+  def cache_tweets
+    redis.set("#{@username}_tweets", concatenate_tweets)
+  end
+
+  def tweet_cache
+    redis.get("#{@username}_tweets")
+  end
+
+  def redis
+    @redis ||= Redis.new
   end
 end

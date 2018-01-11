@@ -2,21 +2,56 @@ require 'spec_helper'
 
 RSpec.describe Poser do
   let(:poser) { Poser.new('johndoe') }
+  let(:markov_chain) { double 'markov chain' }
+  let(:markov_text) { "markov_text" }
+  let(:twitter_user) { double 'twitter user' }
+  let(:tweet) { OpenStruct.new(:text => 'tweet') }
+  let(:cleaned_tweets) { [tweet, tweet, tweet] }
+  let(:redis) { double 'redis' }
+
+  before do
+    allow(MarkovChain).to receive(:new).and_return(markov_chain)
+    allow(markov_chain).to receive(:add_text).and_return(markov_text)
+    allow(TwitterUser).to receive(:new).and_return(twitter_user)
+    allow(twitter_user).to receive(:cleaned_tweets).and_return(cleaned_tweets)
+    allow(Redis).to receive(:new).and_return(redis)
+    allow(redis).to receive(:set)
+    allow(redis).to receive(:get).and_return("tweet\ntweet\ntweet")
+  end
+
+  describe "#initialize" do
+    subject { poser }
+
+    context "when no tweet cache exists" do
+      before do
+        allow(redis).to receive(:get).and_return(nil)
+      end
+
+      it "fetches and caches tweets" do
+        expect(twitter_user).to receive(:cleaned_tweets)
+        expect(redis).to receive(:set)
+        subject
+      end
+    end
+
+    context "when tweet cache exists" do
+      before do
+        allow(redis).to receive(:get).and_return("tweet\ntweet\ntweet")
+      end
+
+      it "doesn't fetch or cache new tweets" do
+        expect(twitter_user).not_to receive(:cleaned_tweets)
+        expect(redis).not_to receive(:set)
+        subject
+      end
+    end
+  end
 
   describe "#markov_tweet" do
     subject { poser.markov_tweet }
 
-    let(:twitter_user) { double 'twitter user' }
-    let(:tweet) { OpenStruct.new(:text => 'tweet') }
-    let(:cleaned_tweets) { [tweet, tweet, tweet] }
-    let(:markov_chain) { double 'markov chain' }
-
     before do
-      allow(MarkovChain).to receive(:new).and_return(markov_chain)
-      allow(markov_chain).to receive(:add_text).and_return(markov_text)
       allow(markov_chain).to receive(:generate_text).and_return(markov_text)
-      allow(TwitterUser).to receive(:new).and_return(twitter_user)
-      allow(twitter_user).to receive(:cleaned_tweets).and_return(cleaned_tweets)
     end
 
     context "when the generated text is over 140 characters" do
