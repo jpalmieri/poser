@@ -17,7 +17,7 @@ class Poser
   end
 
   def markov_tweet
-    truncate_sentences(@markov.generate_text, 140)
+    truncate_text(@markov.generate_text, 140)
   end
 
   def update_cache!
@@ -28,11 +28,27 @@ class Poser
 
   private
 
+  def truncate_text(text, character_limit)
+    return text if text.length <= character_limit
+    if text.scan('.').count > 1 # More than one sentence
+      truncate_sentences(text, character_limit)
+    else
+      truncate_words(text, character_limit)
+    end
+  end
+
   def truncate_sentences(text, character_limit)
     # recursiely drop sentences until under character limit
     return text if text.length <= character_limit
     new_text = text.split('.').slice(0..-2).join('.')
     truncate_sentences("#{new_text}.", character_limit)
+  end
+
+  def truncate_words(text, character_limit)
+    # recursiely drop words until under character limit
+    return text if text.length <= character_limit
+    new_text = text.split(' ').slice(0..-2).join(' ')
+    truncate_words("#{new_text}", character_limit)
   end
 
   def concatenate_tweets

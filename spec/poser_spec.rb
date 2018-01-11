@@ -55,18 +55,36 @@ RSpec.describe Poser do
     end
 
     context "when the generated text is over 140 characters" do
-      let(:markov_text) do
-        "This sentence is 200 characters. Blah blah blah, listen to me. "\
-        "I like to tweet, but only the perfect amount. The perfect amount is "\
-        "140 characters, which this sentence is over by exactly 60 characters."
-      end
-      let(:markov_tweet) do
-        "This sentence is 200 characters. Blah blah blah, listen to me. "\
-        "I like to tweet, but only the perfect amount."
+      context "and multiple sentences" do
+        let(:markov_text) do
+          "This sentence is 200 characters. Blah blah blah, listen to me. "\
+          "I like to tweet, but only the perfect amount. The perfect amount is "\
+          "140 characters, which this sentence is over by exactly 60 characters."
+        end
+        let(:markov_tweet) do
+          "This sentence is 200 characters. Blah blah blah, listen to me. "\
+          "I like to tweet, but only the perfect amount."
+        end
+
+        it "trailing sentences are truncated to meet the 140 character limit" do
+          expect(subject).to eq(markov_tweet)
+        end
       end
 
-      it "removes trailing sentences to meet the 140 character limit" do
-        expect(subject).to eq(markov_tweet)
+      context "and a single sentence" do
+        let(:markov_text) do
+          "This sentence is long long blah blah blah, listen to me "\
+          "I like to tweet, but only the perfect amount The perfect amount is "\
+          "140 characters, which this sentence is over by some amount of characters."
+        end
+        let(:markov_tweet) do
+          "This sentence is long long blah blah blah, listen to me I like to "\
+          "tweet, but only the perfect amount The perfect amount is 140 characters,"
+        end
+
+        it "trailing words are truncated to meet the 140 character limit" do
+          expect(subject).to eq(markov_tweet)
+        end
       end
     end
   end
