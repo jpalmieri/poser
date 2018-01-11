@@ -40,17 +40,9 @@ class TwitterUser
     @twitter_client ||= TwitterClient.new
   end
 
-  def remove_urls(text)
-    text.sub(URI.regexp, '')
-  end
-
-  def remove_extra_whitespace(text)
-    text.split(' ').map {|t| t.strip}.join(' ')
-  end
-
   def clean_text(text)
-    text = remove_urls(text)
-    remove_extra_whitespace(text)
+    text = Utils.remove_urls(text)
+    Utils.remove_extra_whitespace(text)
   end
 
   def last_cached_tweet_date
