@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
-require_relative '../poser.rb'
+require_relative '../lib/poser.rb'
 
 options = {}
 opt_parser = OptionParser.new do |opts|
