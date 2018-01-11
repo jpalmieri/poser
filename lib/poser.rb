@@ -21,6 +21,7 @@ class Poser
   end
 
   def update_cache!
+    puts "Updating tweet cache. May take a while..."
     @tweets = TwitterUser.new(@username).cleaned_tweets
     @markov.add_text(concatenate_tweets)
     cache_tweets

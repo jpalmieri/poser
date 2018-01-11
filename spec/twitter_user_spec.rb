@@ -18,7 +18,7 @@ RSpec.describe TwitterUser do
     context 'with urls in source tweets text' do
       let(:tweet_text) { "Blah blah blah https://t.co/xs0FXqhkVF boop bop" }
       before do
-        allow(client).to receive(:user_timeline).and_return([tweet])
+        allow(client).to receive(:get_all_tweets).and_return([tweet])
       end
 
       it 'removes the urls' do
@@ -35,7 +35,7 @@ RSpec.describe TwitterUser do
 
     context 'when no cached tweet' do
       before do
-        allow(client).to receive(:user_timeline).and_return([new_raw_tweet])
+        allow(client).to receive(:get_all_tweets).and_return([new_raw_tweet])
       end
 
       it { is_expected.to be true }
@@ -50,14 +50,14 @@ RSpec.describe TwitterUser do
 
       context 'and cached tweet is same as newest tweet' do
         before do
-          allow(client).to receive(:user_timeline).and_return([raw_tweet])
+          allow(client).to receive(:get_all_tweets).and_return([raw_tweet])
         end
         it { is_expected.to be false }
       end
 
       context 'and cached tweet is older than newest tweet' do
         before do
-          allow(client).to receive(:user_timeline).and_return([new_raw_tweet, raw_tweet])
+          allow(client).to receive(:get_all_tweets).and_return([new_raw_tweet, raw_tweet])
         end
         it { is_expected.to be true }
       end
