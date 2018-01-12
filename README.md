@@ -18,6 +18,12 @@ bin/poser justnietzche
 
 _Please note that the first run on any new user may take a while while the tweet cache is set up. Subsequent runs will use the cache, so will be much faster._
 
+To rebuild the cache for any user (i.e., fetch any new tweets):
+
+```.sh
+bin/poser USERNAME -r   # or: --refresh-cache
+```
+
 ### Setup
 
 The recommended Ruby version is 2.3.x, due to the [Twitter client gem](https://github.com/sferik/twitter#supported-ruby-versions) being only supported up to this Ruby version. Use with other Ruby versions at your own risk!
