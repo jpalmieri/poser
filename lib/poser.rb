@@ -1,3 +1,5 @@
+require 'redis'
+
 # require all dependency files
 Dir[File.expand_path('../poser/*.rb', __FILE__)].each do |file|
   require file

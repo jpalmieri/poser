@@ -26,41 +26,4 @@ RSpec.describe TwitterUser do
       end
     end
   end
-
-  describe '#new_tweets?' do
-    subject { twitter_user.new_tweets? }
-
-    let(:raw_tweet) { OpenStruct.new(:created_at => Time.parse("2018-01-10 20:08:37 UTC")) }
-    let(:new_raw_tweet) { OpenStruct.new(:created_at => Time.now) }
-
-    context 'when no cached tweet' do
-      before do
-        allow(client).to receive(:get_all_tweets).and_return([new_raw_tweet])
-      end
-
-      it { is_expected.to be true }
-    end
-
-    context 'when tweet cache exists' do
-      let(:redis) { double 'redis' }
-
-      before do
-        allow_any_instance_of(Redis).to receive(:get).and_return(raw_tweet.created_at.to_s)
-      end
-
-      context 'and cached tweet is same as newest tweet' do
-        before do
-          allow(client).to receive(:get_all_tweets).and_return([raw_tweet])
-        end
-        it { is_expected.to be false }
-      end
-
-      context 'and cached tweet is older than newest tweet' do
-        before do
-          allow(client).to receive(:get_all_tweets).and_return([new_raw_tweet, raw_tweet])
-        end
-        it { is_expected.to be true }
-      end
-    end
-  end
 end
