@@ -3,10 +3,10 @@ require 'twitter'
 class TwitterClient < Twitter::REST::Client
   def initialize(options={})
     secrets = {
-      consumer_key:        Utils.secrets['twitter_consumer_key'],
-      consumer_secret:     Utils.secrets['twitter_consumer_secret'],
-      access_token:        Utils.secrets['twitter_access_token'],
-      access_token_secret: Utils.secrets['twitter_access_token_secret']
+      consumer_key:        Utils.secrets['twitter']['consumer_key'],
+      consumer_secret:     Utils.secrets['twitter']['consumer_secret'],
+      access_token:        Utils.secrets['twitter']['access_token'],
+      access_token_secret: Utils.secrets['twitter']['access_token_secret']
     }
     @options = {
       # Tweets are now being returned as truncated unless in 'extended mode'
