@@ -41,3 +41,9 @@ cp secrets.yml.sample secrets.yml
 ```
 
 Then open up `secrets.yml` and add your twitter secrets. You may need to [register the app](https://apps.twitter.com/) in your twitter account to get these secrets.
+
+### Testing
+
+```
+bundle exec rspec
+```
