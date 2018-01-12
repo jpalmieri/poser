@@ -16,7 +16,6 @@ RSpec.describe Poser do
     allow(twitter_client).to receive(:get_all_tweets).and_return(tweets)
     allow(Redis).to receive(:new).and_return(redis)
     allow(redis).to receive(:set)
-    allow(redis).to receive(:get).and_return("tweet\ntweet\ntweet")
   end
 
   describe "#initialize" do
