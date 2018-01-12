@@ -2,6 +2,10 @@
 
 A Markov chain tweet generator
 
+Generates tweets based on a [Markov chain](https://en.wikipedia.org/wiki/Markov_chain) generated from the tweets of any Twitter user.
+
+In other words, generate a tweet that sounds like someone else (but most likely makes absolutely no sense).
+
 ### CLI Usage
 
 ```.sh
