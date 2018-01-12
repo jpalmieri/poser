@@ -24,19 +24,39 @@ class Poser
 
   def update_cache!
     puts "Updating tweet cache. May take a while..."
-    @tweets = TwitterUser.new(@username).cleaned_tweets
-    @markov.add_text(concatenate_tweets)
+    @markov.add_text(tweet_markov_primer)
     cache_tweets
   end
 
   private
 
-  def concatenate_tweets
-    @tweets.map {|t| t.text }.join("\n")
+  def twitter_client
+    @twitter_client ||= TwitterClient.new
+  end
+
+  def tweets
+    @tweets ||= twitter_client.get_all_tweets(@username)
+  end
+
+  def simple_tweets
+    tweets.map do |tweet|
+      # Accessing full_text via attrs due to 'extended mode'
+      # https://github.com/sferik/twitter/issues/813
+      OpenStruct.new(:text => clean_text(tweet.attrs[:full_text]))
+    end
+  end
+
+  def clean_text(text)
+    text = Utils.remove_urls(text)
+    Utils.remove_extra_whitespace(text)
+  end
+
+  def tweet_markov_primer
+    simple_tweets.map {|t| t.text }.join("\n")
   end
 
   def cache_tweets
-    redis.set("#{@username}_tweets", concatenate_tweets)
+    redis.set("#{@username}_tweets", tweet_markov_primer)
   end
 
   def tweet_cache

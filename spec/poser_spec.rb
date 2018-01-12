@@ -4,16 +4,16 @@ RSpec.describe Poser do
   let(:poser) { Poser.new('johndoe') }
   let(:markov_chain) { double 'markov chain' }
   let(:markov_text) { "markov_text" }
-  let(:twitter_user) { double 'twitter user' }
-  let(:tweet) { OpenStruct.new(:text => 'tweet') }
-  let(:cleaned_tweets) { [tweet, tweet, tweet] }
+  let(:twitter_client) { double 'twitter_client' }
+  let(:tweet) { OpenStruct.new(:attrs => { full_text: "tweet" }) }
+  let(:tweets) { [tweet, tweet, tweet] }
   let(:redis) { double 'redis' }
 
   before do
     allow(MarkovChain).to receive(:new).and_return(markov_chain)
     allow(markov_chain).to receive(:add_text).and_return(markov_text)
-    allow(TwitterUser).to receive(:new).and_return(twitter_user)
-    allow(twitter_user).to receive(:cleaned_tweets).and_return(cleaned_tweets)
+    allow(TwitterClient).to receive(:new).and_return(twitter_client)
+    allow(twitter_client).to receive(:get_all_tweets).and_return(tweets)
     allow(Redis).to receive(:new).and_return(redis)
     allow(redis).to receive(:set)
     allow(redis).to receive(:get).and_return("tweet\ntweet\ntweet")
@@ -28,7 +28,7 @@ RSpec.describe Poser do
       end
 
       it "fetches and caches tweets" do
-        expect(twitter_user).to receive(:cleaned_tweets)
+        expect(twitter_client).to receive(:get_all_tweets)
         expect(redis).to receive(:set)
         subject
       end
@@ -40,7 +40,7 @@ RSpec.describe Poser do
       end
 
       it "doesn't fetch or cache new tweets" do
-        expect(twitter_user).not_to receive(:cleaned_tweets)
+        expect(twitter_client).not_to receive(:get_all_tweets)
         expect(redis).not_to receive(:set)
         subject
       end
