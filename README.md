@@ -32,10 +32,12 @@ bin/poser USERNAME -r   # or: --refresh-cache
 
 The recommended Ruby version is 2.3.x, due to the [Twitter client gem](https://github.com/sferik/twitter#supported-ruby-versions) being only supported up to this Ruby version. Use with other Ruby versions at your own risk!
 
-[Redis](https://github.com/antirez/redis) is a dependency. If on a Mac:
+[Redis](https://github.com/antirez/redis) is assumed to be installed and running on the standard port (6379).
+
+If you're on a Mac with [Homebrew](https://brew.sh/), you can install and start Redis with these commands:
 
 ```.sh
-brew install redis
+brew update && brew install redis
 brew services start redis
 ```
 
