@@ -13,7 +13,7 @@ Foe example, to generate a tweet based on the [JustNietzche](https://twitter.com
 ```.sh
 bin/poser justnietzche
 
-# => "Art is the Insofar as we believe in morality we pass sentence on existence. He is always the scapegoat."
+# => "Though i may seem times somewhat... And we have not danced at least once. Sphinx has and as a tree as it were his evil conscience."
 ```
 
 _Please note that the first run on any new user may take a while while the tweet cache is set up. Subsequent runs will use the cache, so will be much faster._
