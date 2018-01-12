@@ -20,6 +20,8 @@ _Please note that the first run on any new user may take a while while the tweet
 
 ### Setup
 
+The recommended Ruby version is 2.3.x, due to the [Twitter client gem](https://github.com/sferik/twitter#supported-ruby-versions) being only supported up to this Ruby version. Use with other Ruby versions at your own risk!
+
 [Redis](https://github.com/antirez/redis) is a dependency. If on a Mac:
 
 ```.sh
@@ -29,11 +31,12 @@ brew services start redis
 
 Other install options can be found at https://redis.io/.
 
-After you have Redis set up, clone the repo and set up the secrets file:
+After you have Redis set up, clone the repo, install the gems, and set up the secrets file:
 
 ```.sh
 git clone https://github.com/jpalmieri/poser
 cd poser
+bundle install
 cp secrets.yml.sample secrets.yml
 ```
 

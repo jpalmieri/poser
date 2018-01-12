@@ -3,3 +3,5 @@
 
 # Ignore secrets file
 secrets.yml
+
+.ruby-version
